@@ -1,17 +1,23 @@
-# first we need tyo create an hash containing the students names and their cohort
-students = [
-  {name: "Dr. Hannibal Lecter", cohort: :november},
-  {name: "Darth Vader", cohort: :november},
-  {name: "Nurse Ratched", cohort: :november},
-  {name: "Michael Corleone", cohort: :november},
-  {name: "Alex DeLarge", cohort: :november},
-  {name: "The Wicked Witch of the West", cohort: :november},
-  {name: "Terminator", cohort: :november},
-  {name: "Freddy Krueger", cohort: :november},
-  {name: "The Joker", cohort: :november},
-  {name: "Joffrey Baratheon", cohort: :november},
-  {name: "Norman Bates", cohort: :november},
-  ]
+def input_students
+# here we are about to ask for the names and give an instruction on how to get out the while loop that will follow
+  puts "Please enter the names of the students"
+  puts "To finish, just hit return twice"
+# create an empty array, this allows us to store the information we gather from the user
+  students = []
+# get the first name using ‘gets’ and .chomp to remove the line drop
+  name = gets.chomp
+# while the name is not(!) empty, repeat this code
+  while !name.empty? do
+    students << {name: name, cohort: :november}
+# above shows us we are hardcoding all but the name that we are given and using the shovel operator to push the data into our empty array
+    puts "Now we have #{students.count} students."
+# ask for the next name
+    name = gets.chomp
+# this is taking another name to be added to our hash and then subsequently our array. If it is left empty then the loop is broken
+  end
+# return the students
+  students
+end
 
 # create the method print_header
 def print_header
@@ -32,6 +38,8 @@ def print_footer(names)
 end
 
 # call the methods:
+students = input_students
+# the above is important as it allows us to equate students to the data from input_students
 print_header
 print(students)
 print_footer(students)
