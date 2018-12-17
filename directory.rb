@@ -37,15 +37,14 @@ def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
 
-# create a print names starting with
-def starting_letter(names)
-  puts "We will print all names beginning with a certain letter."
-  puts "What letter would you like to see?"
-  letter = gets.chomp
+# create a print for names under 12 characters
+def less_than_12(names)
+  puts "These students have less than 12 characters in there name:"
   names.each do |name|
-    initial = name[:name].split("")
-    if initial[0] == letter
-      puts "#{name[:name]} (#{name[:cohort]} cohort)"
+    full_name = name[:name]
+    full_name_no_space = full_name.gsub(" ", "")
+    if full_name_no_space.length <= 12
+      puts full_name
     end
   end
 end
@@ -56,4 +55,4 @@ students = input_students
 print_header
 print(students)
 print_footer(students)
-starting_letter(students)
+less_than_12(students)
