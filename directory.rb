@@ -27,14 +27,27 @@ end
 
 # create the method print
 def print(names)
-  names.each_with_index do |name, index|
-    puts "#{index.to_i + 1}. #{name[:name]} (#{name[:cohort]} cohort)"
-end
+  names.each do |name|
+    puts "#{name[:name]} (#{name[:cohort]} cohort)"
+  end
 end
 
 # create the method print_footer
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
+end
+
+# create a print names starting with
+def starting_letter(names)
+  puts "We will print all names beginning with a certain letter."
+  puts "What letter would you like to see?"
+  letter = gets.chomp
+  names.each do |name|
+    initial = name[:name].split("")
+    if initial[0] == letter
+      puts "#{name[:name]} (#{name[:cohort]} cohort)"
+    end
+  end
 end
 
 # call the methods:
@@ -43,3 +56,4 @@ students = input_students
 print_header
 print(students)
 print_footer(students)
+starting_letter(students)
