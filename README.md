@@ -4,7 +4,7 @@ This is a student directory which will enable you to find contact details for yo
 
 ## How to use the Student Directory ##
 
-'''
+```
 shell
 ruby directory.rb
-'''
+```
