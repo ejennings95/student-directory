@@ -24,7 +24,7 @@ def input_students
 
 
   puts "1) Please enter the name of the student:"
-  name = gets.chomp
+  name = gets.strip
 
     while true do
 
@@ -36,18 +36,18 @@ def input_students
         break
       elsif name != "completed"
         puts "2) Please enter the date of birth of the student (dd/mm/yy):"
-        birthday = gets.chomp
+        birthday = gets.strip
         if birthday.empty?
           birthday = "tbc"
         end
         puts "3) Please enter the student's sport of choice:"
-        sport = gets.chomp
+        sport = gets.strip
         if sport.empty?
           sport = "tbc"
         end
         puts "4) Please enter the student's cohort start month"
         while true do
-          cohort = gets.chomp
+          cohort = gets.strip
           break if $cohort_months.include?(cohort)
           puts "Please enter a correct month"
         end
@@ -62,7 +62,7 @@ def input_students
         end
 
       puts "1) Please enter the name of the student:"
-      name = gets.chomp
+      name = gets.strip
     end
  students
 end
