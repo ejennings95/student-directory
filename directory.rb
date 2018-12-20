@@ -1,64 +1,81 @@
 def input_students
-# here we are about to ask for the student detials and give an instruction on how to get out the while loop that will follow
+
   puts "Please enter the student's details when prompted.".center(100)
   puts "To finish, type 'completed'.".center(100)
-# create an empty array, this allows us to store the information we gather from the user
+
   students = []
-# get the first name using ‘gets’ and .chomp to remove the line drop, if completed end. Otherwise continue through more details
-  puts "Please enter the name of the student:"
+  cohort_months = [
+    'january',
+    'february',
+    'march',
+    'april',
+    'may',
+    'june',
+    'july',
+    'august',
+    'september',
+    'october',
+    'november',
+    'december'
+    ]
+
+  puts "1) Please enter the name of the student:"
   name = gets.chomp
-  if name != "completed"
-    puts "Please enter the date of birth of the student (dd/mm/yy):"
-    birthday = gets.chomp
-    puts "Please enter the student's sport of choice:"
-    sport = gets.chomp
-# as the name was not 'completed' we need the while loop to keep asking and store the information in our array
+
     while true do
-      students << {name: name, birthday: birthday, sport: sport, cohort: :november}
-# above shows us we are hardcoding all but the name, birthday and sport that we are given. we are using the shovel operator to push the data into our empty array
-# now we need to put the student count
-      puts "Now we have #{students.count} students."
-# ask for the next name, birthday and sport. if name has our get out clause of 'completed' then end
-      puts "Please enter the name of the student:"
-      name = gets.chomp
+
+      if name.empty?
+        name = "New Starter"
+      end
+
       if name == "completed"
         break
       elsif name != "completed"
-        puts "Please enter the date of birth of the student (dd/mm/yy):"
+        puts "2) Please enter the date of birth of the student (dd/mm/yy):"
         birthday = gets.chomp
-        puts "Please enter the student's sport of choice:"
+        if birthday.empty?
+          birthday = "tbc"
+        end
+        puts "3) Please enter the student's sport of choice:"
         sport = gets.chomp
-      else
+        if sport.empty?
+          sport = "tbc"
+        end
+        puts "4) Please enter the student's cohort start month"
+        while true do
+          cohort = gets.chomp
+          break if cohort_months.include?(cohort)
+          puts "Please enter a correct month"
+        end
+
       end
+        students << {name: name, birthday: birthday, sport: sport, cohort: cohort.to_s}
+        puts "Now we have #{students.count} students."
+        puts "1) Please enter the name of the student:"
+        name = gets.chomp
     end
-  end
-# return the students
-students
+ students
 end
 
-# create the method print_header
 def print_header
   puts "The students of Villains Academy".center(100)
   puts "------------------".center(100)
 end
 
-# create the method print
 def print(names)
   count = 1
   while count <= names.count
      names.each_with_index do |name, index|
-      puts "#{index.to_i + 1}. #{name[:name]} - date of birth: #{name[:birthday]}, sport of choice: #{name[:sport]} (#{name[:cohort]} cohort)"
+      puts "#{index.to_i + 1}. #{name[:name]} - date of birth: #{name[:birthday]}, sport of choice: #{name[:sport]} (#{name[:cohort]} cohort)".center(100)
       count += 1
     end
   end
 end
 
-# create the method print_footer with counter
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  puts "Overall, we have #{names.count} great students."
 end
 
-# create a print for names under 12 characters
 def less_than_12(names)
   puts "These students have less than 12 characters in there name:".center(100)
   names.each do |name|
@@ -70,9 +87,8 @@ def less_than_12(names)
   end
 end
 
-# call the methods:
 students = input_students
-# the above is important as it allows us to equate students to the data from input_students
+
 print_header
 print(students)
 print_footer(students)
