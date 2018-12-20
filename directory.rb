@@ -1,7 +1,7 @@
 def input_students
 # here we are about to ask for the student detials and give an instruction on how to get out the while loop that will follow
-  puts "Please enter the student's details when prompted."
-  puts "To finish, type 'completed'."
+  puts "Please enter the student's details when prompted.".center(100)
+  puts "To finish, type 'completed'.".center(100)
 # create an empty array, this allows us to store the information we gather from the user
   students = []
 # get the first name using ‘gets’ and .chomp to remove the line drop, if completed end. Otherwise continue through more details
@@ -38,16 +38,16 @@ end
 
 # create the method print_header
 def print_header
-  puts "The students of Villains Academy"
-  puts "------------------"
+  puts "The students of Villains Academy".center(100)
+  puts "------------------".center(100)
 end
 
 # create the method print
 def print(names)
   count = 1
   while count <= names.count
-    names.each do |name|
-      puts "#{name[:name]}, date of birth: #{name[:birthday]}, sport of choice: #{name[:sport]} (#{name[:cohort]} cohort)"
+     names.each_with_index do |name, index|
+      puts "#{index.to_i + 1}. #{name[:name]} - date of birth: #{name[:birthday]}, sport of choice: #{name[:sport]} (#{name[:cohort]} cohort)"
       count += 1
     end
   end
@@ -60,12 +60,12 @@ end
 
 # create a print for names under 12 characters
 def less_than_12(names)
-  puts "These students have less than 12 characters in there name:"
+  puts "These students have less than 12 characters in there name:".center(100)
   names.each do |name|
     full_name = name[:name]
     full_name_no_space = full_name.gsub(" ", "")
     if full_name_no_space.length <= 12
-      puts full_name
+      puts " - #{full_name}"
     end
   end
 end
