@@ -1,23 +1,27 @@
+$cohort_months = [
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december'
+  ]
+
+$width = 100
+
 def input_students
 
-  puts "Please enter the student's details when prompted.".center(100)
-  puts "To finish, type 'completed'.".center(100)
+  puts "Please enter the student's details when prompted.".center($width)
+  puts "To finish, type 'completed'.".center($width)
 
   students = []
-  cohort_months = [
-    'january',
-    'february',
-    'march',
-    'april',
-    'may',
-    'june',
-    'july',
-    'august',
-    'september',
-    'october',
-    'november',
-    'december'
-    ]
+
 
   puts "1) Please enter the name of the student:"
   name = gets.chomp
@@ -44,7 +48,7 @@ def input_students
         puts "4) Please enter the student's cohort start month"
         while true do
           cohort = gets.chomp
-          break if cohort_months.include?(cohort)
+          break if $cohort_months.include?(cohort)
           puts "Please enter a correct month"
         end
 
@@ -58,26 +62,46 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy".center(100)
-  puts "------------------".center(100)
+  puts "The students of Villains Academy".center($width)
+  puts "------------------".center($width)
 end
 
 def print(names)
+  monthhash = {}
   count = 1
-  while count <= names.count
-     names.each_with_index do |name, index|
-      puts "#{index.to_i + 1}. #{name[:name]} - date of birth: #{name[:birthday]}, sport of choice: #{name[:sport]} (#{name[:cohort]} cohort)".center(100)
-      count += 1
-    end
-  end
+
+      names.each do |student|
+      start_month = student[:cohort]
+
+        if monthhash[start_month] == nil
+            monthhash[start_month] = []
+        end
+
+        monthhash[start_month] << "#{student[:name]} - date of birth: #{student[:birthday]}, sport of choice: #{student[:sport]} (#{student[:cohort]} cohort)"
+
+        end
+        $cohort_months.each do |months|
+          monthhash.each do |month, info|
+           if months == month
+          puts "#{month}:".center($width)
+          info.each do |pupil|
+            puts "#{count}. #{pupil}".center($width)
+          count += 1
+        end
+        end
+        end
 end
+end
+
+
+
 
 def print_footer(names)
   puts "Overall, we have #{names.count} great students."
 end
 
 def less_than_12(names)
-  puts "These students have less than 12 characters in there name:".center(100)
+  puts "These students have less than 12 characters in there name:".center($width)
   names.each do |name|
     full_name = name[:name]
     full_name_no_space = full_name.gsub(" ", "")
