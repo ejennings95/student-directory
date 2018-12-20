@@ -27,8 +27,12 @@ end
 
 # create the method print
 def print(names)
-  names.each do |name|
-    puts "#{name[:name]} (#{name[:cohort]} cohort)"
+  count = 1
+  while count <= names.count
+    names.each do |name|
+      puts "#{name[:name]} (#{name[:cohort]} cohort)"
+      count += 1
+    end
   end
 end
 
