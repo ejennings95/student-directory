@@ -53,10 +53,16 @@ def input_students
         end
 
       end
-        students << {name: name, birthday: birthday, sport: sport, cohort: cohort.to_s}
-        puts "Now we have #{students.count} students."
-        puts "1) Please enter the name of the student:"
-        name = gets.chomp
+
+      students << {name: name, birthday: birthday, sport: sport, cohort: cohort.to_s}
+        if students.count == 1
+          puts "Now we have #{students.count} student."
+        else
+          puts "Now we have #{students.count} students."
+        end
+
+      puts "1) Please enter the name of the student:"
+      name = gets.chomp
     end
  students
 end
@@ -97,7 +103,11 @@ end
 
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students."
+  if names.count == 1
+    puts "Overall, we have #{names.count} great student."
+  else
+    puts "Overall, we have #{names.count} great students."
+  end
 end
 
 def less_than_12(names)
