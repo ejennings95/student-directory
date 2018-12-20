@@ -89,7 +89,7 @@ def print(names)
         $cohort_months.each do |months|
           monthhash.each do |month, info|
            if months == month
-          puts "#{month}:".center($width)
+          puts "#{month.capitalize}:".center($width)
           info.each do |pupil|
             puts "#{count}. #{pupil}".center($width)
           count += 1
@@ -122,8 +122,10 @@ def less_than_12(names)
 end
 
 students = input_students
-
-print_header
-print(students)
-print_footer(students)
-less_than_12(students)
+if students.empty?
+else
+  print_header
+  print(students)
+  print_footer(students)
+  less_than_12(students)
+end
