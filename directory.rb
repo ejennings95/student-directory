@@ -48,7 +48,7 @@ def input_students
       end
     end
 
-    @students << {name: name, birthday: birthday, sport: sport, cohort: cohort}
+    add_to_students(name, birthday, sport, cohort)
       if @students.count == 1
         puts "Now we have #{@students.count} student."
       else
@@ -99,6 +99,10 @@ def process(selection)
   end
 end
 
+def add_to_students(name, birthday, sport, cohort)
+  @students << {name: name, birthday: birthday, sport: sport, cohort: cohort}
+end
+
 def saved_students
   file = File.open("students.csv", "w")
   @students.each do |student|
@@ -113,7 +117,7 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, birthday, sport, cohort = line.chomp.split(",")
-    @students << {name: name, birthday: birthday, sport: sport, cohort: cohort}
+    add_to_students(name, birthday, sport, cohort)
   end
   file.close
 end
@@ -149,7 +153,7 @@ def print_student_list
       if monthhash[start_month] == nil
           monthhash[start_month] = []
       end
-    monthhash[start_month] << "#{student[:name]} - date of birth: #{student[:birthday]}, sport of choice: #{student[:sport]} (#{student[:cohort]} cohort)"
+    monthhash[start_month] << "#{student[:name]} - date of birth: #{student[:birthday]}, sport of choice: #{student[:sport]} (#{student[:cohort].capitalize} cohort)"
   end
 
   $cohort_months.each do |months|
