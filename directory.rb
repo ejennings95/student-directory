@@ -111,6 +111,7 @@ def process(selection)
   when "4"
     load_students
   when "9"
+    puts "Goodbye!"
     exit
   else
     puts "Sorry, I do not know this command."
@@ -125,6 +126,7 @@ def saved_students
     file.puts csv_line
   end
   file.close
+  puts "Save complete."
 end
 
 def load_students(filename = "students.csv")
