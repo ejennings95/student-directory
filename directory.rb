@@ -121,23 +121,23 @@ end
 def saved_students
   puts "Where would you like to save the student records?"
   filename = STDIN.gets.strip
-  file = File.open(filename, "w")
-  @students.each do |student|
-    student_data = [student[:name], student[:birthday], student[:sport], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  File.open(filename, "w") do |file|
+    @students.each do |student|
+      student_data = [student[:name], student[:birthday], student[:sport], student[:cohort]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
   end
-  file.close
   puts "Save complete."
 end
 
 def load_students(filename)
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, birthday, sport, cohort = line.chomp.split(",")
-    add_to_students(name, birthday, sport, cohort)
+  File.open(filename, "r") do |file|
+    file.readlines.each do |line|
+      name, birthday, sport, cohort = line.chomp.split(",")
+      add_to_students(name, birthday, sport, cohort)
+    end
   end
-  file.close
   number_loaded(filename)
 end
 
