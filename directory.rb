@@ -20,7 +20,7 @@ def input_students
   puts "Please enter the student's details when prompted.".center($width)
   puts "To finish, type 'completed'.".center($width)
   puts "1) Please enter the name of the student:"
-  name = gets.strip
+  name = STDIN.gets.strip
 
   while true do
     if name.empty?
@@ -31,18 +31,18 @@ def input_students
       break
     elsif name != "completed"
       puts "2) Please enter the date of birth of the student (dd/mm/yy):"
-      birthday = gets.strip
+      birthday = STDIN.gets.strip
         if birthday.empty?
           birthday = "tbc"
         end
       puts "3) Please enter the student's sport of choice:"
-      sport = gets.strip
+      sport = STDIN.gets.strip
         if sport.empty?
           sport = "tbc"
         end
       puts "4) Please enter the student's cohort start month"
       while true do
-        cohort = gets.strip
+        cohort = STDIN.gets.strip
         break if $cohort_months.include?(cohort)
         puts "Please enter a correct month"
       end
@@ -56,14 +56,15 @@ def input_students
       end
 
     puts "1) Please enter the name of the student:"
-    name = gets.strip
+    name = STDIN.gets.strip
   end
 end
 
 def interactive_menu
+  try_load_students
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.strip)
   end
 end
 
@@ -108,13 +109,29 @@ def saved_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, birthday, sport, cohort = line.chomp.split(",")
     @students << {name: name, birthday: birthday, sport: sport, cohort: cohort}
   end
   file.close
+end
+
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+    if @students.count == 1
+      puts "Loaded #{@students.count} student from #{filename}."
+    else
+      puts "Loaded #{@students.count} students from #{filename}."
+    end
+  else
+    puts "Sorry, #{filename} does not exist."
+    exit
+  end
 end
 
 def print_header
