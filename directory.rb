@@ -16,12 +16,18 @@ $cohort_months = [
 
 $width = 100
 
-def input_students
+def input_students_instructions
   puts "Please enter the student's details when prompted.".center($width)
   puts "To finish, type 'completed'.".center($width)
   puts "1) Please enter the name of the student:"
   name = STDIN.gets.strip
+  if name == "completed"
+    interactive_menu
+  end
+  inputting_students(name)
+end
 
+def inputting_students(name)
   while true do
     if name.empty?
       name = "New Starter"
@@ -31,37 +37,49 @@ def input_students
       break
     elsif name != "completed"
       puts "2) Please enter the date of birth of the student (dd/mm/yy):"
-      birthday = STDIN.gets.strip
-        if birthday.empty?
-          birthday = "tbc"
-        end
+      birthday = student_details
       puts "3) Please enter the student's sport of choice:"
-      sport = STDIN.gets.strip
-        if sport.empty?
-          sport = "tbc"
-        end
+      sport = student_details
       puts "4) Please enter the student's cohort start month"
-      while true do
-        cohort = STDIN.gets.strip
-        break if $cohort_months.include?(cohort)
-        puts "Please enter a correct month"
-      end
+      cohort = cohort_check
     end
 
     add_to_students(name, birthday, sport, cohort)
-      if @students.count == 1
-        puts "Now we have #{@students.count} student."
-      else
-        puts "Now we have #{@students.count} students."
-      end
+    return_new_count
 
     puts "1) Please enter the name of the student:"
     name = STDIN.gets.strip
   end
 end
 
+def student_details
+  answer = STDIN.gets.strip
+  answer.empty? ? answer = "tbc" : answer
+end
+
+def cohort_check
+  while true do
+    cohort = STDIN.gets.downcase.strip
+    break if $cohort_months.include?(cohort)
+    puts "Please enter a correct month"
+  end
+  cohort
+end
+
+def add_to_students(name, birthday, sport, cohort)
+  @students << {name: name, birthday: birthday, sport: sport, cohort: cohort}
+end
+
+def return_new_count
+  if @students.count == 1
+    puts "Now we have #{@students.count} student."
+  else
+    puts "Now we have #{@students.count} students."
+  end
+end
+
 def interactive_menu
-  try_load_students
+  @students.empty? ? try_load_students : nil
   loop do
     print_menu
     process(STDIN.gets.strip)
@@ -78,14 +96,14 @@ end
 
 def show_students
   print_header
-  print_student_list
+  print_students_by_cohort
   print_footer
 end
 
 def process(selection)
   case selection
   when "1"
-    input_students
+    input_students_instructions
   when "2"
     show_students
   when "3"
@@ -97,10 +115,6 @@ def process(selection)
   else
     puts "Sorry, I do not know this command."
   end
-end
-
-def add_to_students(name, birthday, sport, cohort)
-  @students << {name: name, birthday: birthday, sport: sport, cohort: cohort}
 end
 
 def saved_students
@@ -120,23 +134,25 @@ def load_students(filename = "students.csv")
     add_to_students(name, birthday, sport, cohort)
   end
   file.close
+  number_loaded(filename)
 end
 
 def try_load_students
   filename = ARGV.first
-  if filename.nil?
-   filename = "students.csv"
-  end
+  filename.nil? ? filename = "students.csv" : nil
   if File.exists?(filename)
     load_students(filename)
-    if @students.count == 1
-      puts "Loaded #{@students.count} student from #{filename}."
-    else
-      puts "Loaded #{@students.count} students from #{filename}."
-    end
   else
     puts "Sorry, #{filename} does not exist."
     exit
+  end
+end
+
+def number_loaded(filename)
+  if @students.count == 1
+    puts "Loaded #{@students.count} student from #{filename}."
+  else
+    puts "Loaded #{@students.count} students from #{filename}."
   end
 end
 
@@ -145,21 +161,23 @@ def print_header
   puts "------------------".center($width)
 end
 
-def print_student_list
-  monthhash = {}
-  count = 1
-
+def create_hash_by_cohort
+  @monthhash = {}
   @students.each do |student|
     start_month = student[:cohort]
 
-      if monthhash[start_month] == nil
-          monthhash[start_month] = []
+      if @monthhash[start_month] == nil
+          @monthhash[start_month] = []
       end
-    monthhash[start_month] << "#{student[:name]} - date of birth: #{student[:birthday]}, sport of choice: #{student[:sport]} (#{student[:cohort].capitalize} cohort)"
+    @monthhash[start_month] << "#{student[:name]} - date of birth: #{student[:birthday]}, sport of choice: #{student[:sport]} (#{student[:cohort].capitalize} cohort)"
   end
+end
 
+def print_students_by_cohort
+  create_hash_by_cohort
+  count = 1
   $cohort_months.each do |months|
-    monthhash.each do |month, info|
+    @monthhash.each do |month, info|
       if months == month
         puts "#{month.capitalize}:".center($width)
         info.each do |pupil|
