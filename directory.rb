@@ -89,8 +89,8 @@ end
 def print_menu
   puts "1 - Input the students"
   puts "2 - Show the students"
-  puts "3 - Save the list to students.csv"
-  puts "4 - Load previous student data from students.csv"
+  puts "3 - Save student date to file"
+  puts "4 - Load student data from file"
   puts "9 - Exit"
 end
 
@@ -109,7 +109,7 @@ def process(selection)
   when "3"
     saved_students
   when "4"
-    load_students
+    load_from_file
   when "9"
     puts "Goodbye!"
     exit
@@ -119,7 +119,9 @@ def process(selection)
 end
 
 def saved_students
-  file = File.open("students.csv", "w")
+  puts "Where would you like to save the student records?"
+  filename = STDIN.gets.strip
+  file = File.open(filename, "w")
   @students.each do |student|
     student_data = [student[:name], student[:birthday], student[:sport], student[:cohort]]
     csv_line = student_data.join(",")
@@ -129,7 +131,7 @@ def saved_students
   puts "Save complete."
 end
 
-def load_students(filename = "students.csv")
+def load_students(filename)
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, birthday, sport, cohort = line.chomp.split(",")
@@ -139,10 +141,29 @@ def load_students(filename = "students.csv")
   number_loaded(filename)
 end
 
+def load_from_file
+  loop do
+    puts "Which file would you like to load date from?"
+    puts "Type 'exit' to return to menu."
+    answer = STDIN.gets.strip
+    if File.exists?(answer)
+      load_students(answer)
+      break
+    elsif answer == "exit"
+      puts "Returning to menu."
+      break
+    else
+      puts "Sorry, #{answer} does not exist."
+    end
+  end
+end
+
+
 def try_load_students
   filename = ARGV.first
   filename.nil? ? filename = "students.csv" : nil
   if File.exists?(filename)
+    puts "Student data loaded from #{filename}."
     load_students(filename)
   else
     puts "Sorry, #{filename} does not exist."
@@ -152,9 +173,9 @@ end
 
 def number_loaded(filename)
   if @students.count == 1
-    puts "Loaded #{@students.count} student from #{filename}."
+    puts "There is now #{@students.count} student saved in this directory."
   else
-    puts "Loaded #{@students.count} students from #{filename}."
+    puts "There are now #{@students.count} students saved in this directory."
   end
 end
 
