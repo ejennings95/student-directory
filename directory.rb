@@ -1,3 +1,4 @@
+require "csv"
 @students = []
 $cohort_months = [
   'january',
@@ -91,6 +92,7 @@ def print_menu
   puts "2 - Show the students"
   puts "3 - Save student date to file"
   puts "4 - Load student data from file"
+  puts "5 - Source code of current file"
   puts "9 - Exit"
 end
 
@@ -110,6 +112,8 @@ def process(selection)
     saved_students
   when "4"
     load_from_file
+  when "5"
+    source_code
   when "9"
     puts "Goodbye!"
     exit
@@ -121,25 +125,22 @@ end
 def saved_students
   puts "Where would you like to save the student records?"
   filename = STDIN.gets.strip
-  File.open(filename, "w") do |file|
+  CSV.open("#{filename}", "w") do |file|
     @students.each do |student|
-      student_data = [student[:name], student[:birthday], student[:sport], student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+      file << [student[:name], student[:birthday], student[:sport], student[:cohort]]
     end
   end
   puts "Save complete."
 end
 
 def load_students(filename)
-  File.open(filename, "r") do |file|
-    file.readlines.each do |line|
-      name, birthday, sport, cohort = line.chomp.split(",")
-      add_to_students(name, birthday, sport, cohort)
-    end
+  CSV.foreach("#{filename}") do |row|
+    name, birthday, sport, cohort = row
+    add_to_students(name, birthday, sport, cohort)
   end
   number_loaded(filename)
 end
+
 
 def load_from_file
   loop do
@@ -218,6 +219,10 @@ def print_footer
   else
     puts "Overall, we have #{@students.count} great students."
   end
+end
+
+def source_code
+  puts $0
 end
 
 interactive_menu
